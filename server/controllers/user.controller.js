@@ -185,7 +185,7 @@ export const createOrder = async (req, res, next) => {
       });
       await newOrder.save();
     }
-
+    
     ///pushing order to shiprocket if shipping method is shiprocket
     //getting authtoken of shiprocket
     let responseText = "order placed";

@@ -8,11 +8,12 @@ import AdminContext from "../../context/AdminContext";
 import { useNavigate } from "react-router-dom";
 const ProductsList = () => {
   const navigate = useNavigate();
-  let { adminId } = useContext(AdminContext);
+  let { adminId, setSideBar } = useContext(AdminContext);
   let [products, setProducts] = useState(null);
   const [fetchProduct, setFetchProduct] = useState(true);
   const [searchProducts, setSearchProducts] = useState(null);
   useEffect(() => {
+    setSideBar(false)
     if (!adminId) {
       navigate("/admin/signin");
     }
@@ -52,13 +53,13 @@ const ProductsList = () => {
   return (
     <>
       <Navbar />
-      <div className="flex">
+      <div className="flex h-screen">
         <SideBar />
 
         {/* search bar */}
         <div className="flex flex-col w-full bg-white">
           <div className="mt-5 lg:ms-72 flex justify-center gap-0">
-            <form className="md:w-1/2 mx-auto">
+            <form className="md:w-1/2 w-full px-10 mx-auto">
               <label
                 htmlFor="default-search"
                 className="mb-2 text-sm font-medium text-gray-900 sr-only "

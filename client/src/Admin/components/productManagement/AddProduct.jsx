@@ -183,7 +183,7 @@ const AddProduct = ({
     <div
       className={`${
         !productForm ? "hidden" : ""
-      } fixed overflow-scroll inset-0 bg-black backdrop-blur-sm bg-opacity-30`}
+      } fixed h-screen overflow-scroll inset-0 bg-black backdrop-blur-sm bg-opacity-30`}
     >
       <div className="min-h-screen p-6 flex items-center justify-center">
         <div className="container max-w-screen-lg mx-auto">
@@ -251,7 +251,7 @@ const AddProduct = ({
                         name="category"
                         placeholder="Enter catergory name"
                         id="category"
-                        className="ms-3 h-10 border mt-1 rounded px-4 bg-gray-50"
+                        className="ms-3 h-10 border mt-1 rounded px-4 bg-gray-50 uppercase text-xs"
                         onChange={handleProductData}
                         value={
                           productData && productData.category
@@ -692,16 +692,16 @@ const AddProduct = ({
                     </div>
                   </div>
                 </div>
-                <IconsList
-                  listPrompt={listPrompt}
-                  setListPrompt={setListPrompt}
-                  updateIcon={updateIcon}
-                />
               </div>
             </div>
           </div>
         </div>
       </div>
+      <IconsList
+        listPrompt={listPrompt}
+        setListPrompt={setListPrompt}
+        updateIcon={updateIcon}
+      />
     </div>
   );
 };

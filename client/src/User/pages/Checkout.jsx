@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import logo from "../img/logo.png";
-import shiprokcet from "../img/shiprocket.jpeg";
+import homeDelivery from "../img/homeDelivery.jpg";
 import { CartContext } from "../contexts/CartContext";
 import { useContext, useState } from "react";
 import flag from "../img/flag.jpg";
@@ -26,6 +26,9 @@ import { makePayment } from "../utils/payment";
 import { Navigate } from "react-router-dom";
 import { toast, Toaster } from "react-hot-toast";
 import { SidebarContext } from "../contexts/SidebarContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHourglass } from "@fortawesome/free-solid-svg-icons";
+import { OrderContext } from "../contexts/OrderContext";
 
 const Checkout = () => {
   const {
@@ -61,9 +64,10 @@ const Checkout = () => {
     shippingMethod: null,
     paymentMethod: null,
   });
-  const [shipMethodError, setShipMethodError] = useState(null);
+  const [shipMethodError, setShipMethodError] = useState(false);
   const [paymentError, setPaymentError] = useState(false);
   const API = import.meta.env.VITE_API_URL;
+  const { setOrderPlaced } = useContext(OrderContext);
 
   const navigate = useNavigate();
   const { userId } = useContext(userContext);
@@ -81,7 +85,6 @@ const Checkout = () => {
   }, [cart]);
 
   const handleOrderDetails = (name, value) => {
-    console.log("name : ",name," ", " value :" , value)
     setOrderDetails((prev) => ({
       ...prev,
       [name]: value,
@@ -89,23 +92,25 @@ const Checkout = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-
     // Perform validation
+    let error = false;
     if (!validateName(orderDetails.name)) {
       setNameError("Please enter your name");
+      error = true;
     } else {
       setNameError("");
     }
 
     if (!validateEmail(orderDetails.email)) {
       setEmailError("Please enter a valid email address");
+      error = true;
     } else {
       setEmailError("");
     }
 
     if (!validatePhoneNumber(orderDetails.mobile)) {
       setPhoneNumberError("Please enter a valid phone number");
+      error = true;
     } else {
       setPhoneNumberError("");
     }
@@ -115,6 +120,7 @@ const Checkout = () => {
       orderDetails.shippingMethod == ""
     ) {
       setShipMethodError(true);
+      error = true;
     } else {
       setShipMethodError(false);
     }
@@ -124,6 +130,7 @@ const Checkout = () => {
       orderDetails.paymentMethod == null
     ) {
       setPaymentError(true);
+      error = true;
     } else {
       setPaymentError(false);
     }
@@ -131,85 +138,97 @@ const Checkout = () => {
 
     if (cityid === 0 || stateid === 0) {
       toast.error("Please choose your city and state");
+      error = true;
     }
     // Additional logic for handling form submission
-    if (
-      validateName(orderDetails.name) &&
-      validateEmail(orderDetails.email) &&
-      validatePhoneNumber(orderDetails.mobile) &&
-      !pinCodeError.error &&
-      cityid !== 0 &&
-      stateid !== 0 &&
-      shipMethodError == false &&
-      paymentError == false
-    ) {
+    
+    if (error == false) {
       // Form submission logic here
-
       if (
         (orderDetails.shippingMethod == "shiprocket" &&
           orderDetails.paymentMethod == "Prepaid") ||
         orderDetails.shippingMethod == "DTDC"
       ) {
-        const response = await fetch(`/api/payment/createPayment/${userId}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            amount: discountPrice > 0 ? discountPrice : totalPrice,
-          }),
-          credentials: "include",
-        });
+        const newOrder = async () => {
 
-        if (response.ok) {
-          const paymentOrder = await response.json();
-          try {
-            await makePayment(
-              paymentOrder.key_id,
-              paymentOrder.order,
-              userId,
-              orderDetails
-            );
-            navigate("/");
-            clearCart();
-            handleClose();
-          } catch (err) {
-            alert("payment failed");
+          const response = await fetch(`/api/payment/createPayment/${userId}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              amount: discountPrice > 0 ? discountPrice : totalPrice,
+            }),
+            credentials: "include",
+          });
+
+          if (response.ok) {
+            const paymentOrder = await response.json();
+            try {
+              await makePayment(
+                paymentOrder.key_id,
+                paymentOrder.order,
+                userId,
+                orderDetails
+              );
+              clearCart();
+              handleClose();
+              setOrderPlaced(orderDetails);
+              navigate(`/fetchOrders/${userId}`);
+            } catch (err) {
+              toast.error("Payment failed");
+            }
+          } else {
+            toast.error("SERVER ERROR! TRY AGAIN.");
+            throw new Error("SERVER ERROR! TRY AGAIN.");
           }
-        } else {
-          alert("SERVER ERROR! TRY AGAIN.");
-        }
+        };
+
+        toast.promise(newOrder(), {
+          loading: "Creating Your Order...",
+          success: <b>Order Placed.</b>,
+          error: <b>Failed to create order, try again.</b>,
+        });
       } else {
         // cash on delivery for shiprocket
-        const response = await fetch(`/api/user/newOrder/${userId}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            ...orderDetails,
-            sellingPrice: discountPrice > 0 ? discountPrice : totalPrice,
-          }),
-          credentials: "include",
-        });
+        const newCodOrder = async () => {
+          const response = await fetch(`/api/user/newOrder/${userId}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              ...orderDetails,
+              sellingPrice: discountPrice > 0 ? discountPrice : totalPrice,
+            }),
+            credentials: "include",
+          });
 
-        if (response.ok) {
-          alert("order placed successfully");
-          localStorage.setItem("enteBuddyCartPrice", 0);
-          localStorage.setItem("enteBuddyCart", null);
-          localStorage.setItem("enteBuddyCouponId", "");
-          clearCart();
-          handleClose();
-          navigate(`/fetchOrders/${userId}`);
-        } else {
-          alert("Failed to place order, please try again.");
-        }
+          if (response.ok) {
+            setOrderPlaced(orderDetails);
+            localStorage.setItem("enteBuddyCartPrice", 0);
+            localStorage.setItem("enteBuddyCart", null);
+            localStorage.setItem("enteBuddyCouponId", "");
+            clearCart();
+            handleClose();
+            navigate(`/fetchOrders/${userId}`);
+          } else {
+            toast.error("Failed to place order, please try again.");
+            throw new Error("Failed to create order");
+          }
+        };
+
+        toast.promise(newCodOrder(), {
+          loading: "Creating Your Order...",
+          success: <b>Order Placed.</b>,
+          error: <b>Failed to create order, try again.</b>,
+        });
       }
-    }
+    } 
   };
 
   return (
-    <div className="font-poppins bg-gray-50">
+    <div className="font-poppins bg-gray-50 pb-16">
       <Toaster toastOptions={{ duration: 2000 }} />
       <div className="flex flex-col items-center border-b bg-white py-2 sm:flex-row sm:px-10 lg:px-20 xl:px-32">
         <a
@@ -293,7 +312,7 @@ const Checkout = () => {
           </div>
         </div>
       </div>
-      <div className="grid sm:px-10 lg:grid-cols-2 lg:px-20 xl:px-32">
+      <div className="grid px-5 lg:grid-cols-2 lg:px-20 xl:px-32">
         <div className="px-4 pt-8 bg-gray-50">
           <p className="text-lg font-medium dark:text-black">Order Summary</p>
           <p className="text-gray-400">
@@ -327,8 +346,10 @@ const Checkout = () => {
 
           {/* ///// */}
           <form className="mt-5 grid gap-6 bg-gray-50">
-            <div className="mt-10 bg-gray-50 px-4 pt-8 lg:mt-0">
-              <p className="text-lg font-medium dark:text-black">Payment Details</p>
+            <div className=" bg-gray-50 px-4 pt-8 lg:mt-0">
+              <p className="text-lg font-medium dark:text-black">
+                Payment Details
+              </p>
               <p className="text-gray-400 dark:text-blaxk">
                 Complete your order by providing your payment details.
               </p>
@@ -338,7 +359,7 @@ const Checkout = () => {
                   htmlFor="email"
                   className="mt-4 mb-2 block text-sm font-medium font-poppins dark:text-black"
                 >
-                 Name
+                  Name
                 </label>
                 <div className="">
                   <input
@@ -378,7 +399,9 @@ const Checkout = () => {
                     id="email"
                     name="email"
                     className={`w-full rounded-md border ${
-                      emailError ? "border-red-500" : "border-gray-200  dark:bg-white "
+                      emailError
+                        ? "border-red-500"
+                        : "border-gray-200  dark:bg-white "
                     } px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500`}
                     placeholder="Your.email@gmail.com"
                     value={orderDetails.email}
@@ -428,7 +451,9 @@ const Checkout = () => {
                     name="mobile"
                     value={orderDetails.mobile}
                     className={`w-full rounded-md border ${
-                      phoneNumberError ? "border-red-500" : "border-gray-200 dark:bg-white"
+                      phoneNumberError
+                        ? "border-red-500"
+                        : "border-gray-200 dark:bg-white"
                     }  px-4 py-3 pl-3 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500`}
                     placeholder="Your phone number"
                     required
@@ -481,7 +506,7 @@ const Checkout = () => {
                   </div>
                   <div className="font-medium font-poppins text-sm my-2  ">
                     <h6 className="mb-2 dark:text-black">State</h6>
-                    <StateSelect 
+                    <StateSelect
                       darkMode={true}
                       countryid={101}
                       onChange={(e) => {
@@ -489,13 +514,12 @@ const Checkout = () => {
                         handleOrderDetails("state", e.name);
                       }}
                       placeHolder="Select State"
-                      required 
-                      
+                      style={{ background: "white" }}
+                      required
                     />
                   </div>
 
                   <div className="font-poppins text-sm font-medium my-2">
-                    <div></div>
                     <h2 className="mb-2 dark:text-black">City</h2>
                     <CitySelect
                       countryid={101}
@@ -505,10 +529,11 @@ const Checkout = () => {
                         handleOrderDetails("city", e.name);
                       }}
                       placeHolder="Select city"
-                      required 
-                      style={{background: "white"}}
+                      required
+                      style={{ background: "white" }}
                     />
-
+                  </div>
+                  <div className="mt-3 w-full">
                     <input
                       type="text"
                       name="pincode"
@@ -518,9 +543,33 @@ const Checkout = () => {
                       onChange={(e) => {
                         handleOrderDetails(e.target.name, e.target.value);
                       }}
-                      onInput={(e) =>
-                        validatePinCode(e.target.value, setPinCodeError, userId)
-                      }
+                      onInput={(e) => {
+                        if (e.target.value.length == 6) {
+                          toast.promise(
+                            validatePinCode(
+                              e.target.value,
+                              setPinCodeError,
+                              userId
+                            ),
+                            {
+                              loading: "Checking pincode...",
+                              success: <b>Pincode is valid.</b>,
+                              error: (
+                                <b>
+                                  Delivery not available at this
+                                  location.
+                                </b>
+                              ),
+                            }
+                          );
+                        } else {
+                          validatePinCode(
+                            e.target.value,
+                            setPinCodeError,
+                            userId
+                          );
+                        }
+                      }}
                     />
                   </div>
 
@@ -542,7 +591,9 @@ const Checkout = () => {
         {/*  */}
         {/* shipping method */}
         <div className="p-7">
-          <p className="mt-8 text-lg font-medium dark:text-black">Shipping Methods</p>
+          <p className="mt-8 text-lg font-medium dark:text-black">
+            Shipping Methods
+          </p>
           <p className="text-sm text-gray-600 mb-10 dark:text-black">
             Choose any one of the shipping methods.
           </p>
@@ -563,22 +614,25 @@ const Checkout = () => {
                   handleOrderDetails(e.target.name, e.target.value)
                 }
               />
-              <span className="peer-checked:border-gray-700 absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white"></span>
+              <label
+                htmlFor="radio_1"
+                className="peer-checked:border-gray-700 absolute cursor-pointer right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white"
+              ></label>
               <label
                 className="peer-checked:border-2 peer-checked:border-gray-700 peer-checked:bg-gray-50 flex cursor-pointer select-none rounded-lg border border-gray-300 p-4"
                 htmlFor="radio_1"
               >
                 <img
-                  className="w-8 object-contain"
-                  src={shiprokcet}
+                  className="w-12 md:w-14 object-contain"
+                  src={homeDelivery}
                   alt="shiprocket"
                 />
                 <div className="ml-5">
                   <span className="mt-2 font-semibold uppercase dark:text-black">
-                    Shiprocket Delivery
+                    Door Delivery
                   </span>
                   <p className="text-slate-500 text-sm leading-6 dark:text-black">
-                    Delivery: 2 to 4 Days 
+                    Delivery: 2 to 4 Days
                   </p>
                   <p className="text-slate-500 text-sm leading-6 dark:text-black">
                     COD AND PREPAID
@@ -600,13 +654,16 @@ const Checkout = () => {
                   handleOrderDetails(e.target.name, e.target.value)
                 }
               />
-              <span className="peer-checked:border-gray-700 absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white"></span>
+              <label
+                htmlFor="dtdc"
+                className="peer-checked:border-gray-700 cursor-pointer absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white"
+              ></label>
               <label
                 className="peer-checked:border-2 peer-checked:border-gray-700 peer-checked:bg-gray-50 flex cursor-pointer select-none rounded-lg border border-gray-300 p-4"
                 htmlFor="dtdc"
               >
                 <img
-                  className="w-8 object-contain"
+                  className="w-12 md:w-14 object-contain"
                   src={DTDC}
                   alt="shiprocket"
                 />
@@ -632,7 +689,9 @@ const Checkout = () => {
           {/* payment method */}
           {orderDetails.shippingMethod == "shiprocket" && (
             <div className="mt-8">
-              <h1 className="font-medium text-xl dark:text-black">Payment Method</h1>
+              <h1 className="font-medium text-xl dark:text-black">
+                Payment Method
+              </h1>
               <p className="text-sm text-gray-600 dark:text-black">
                 Choose payment method for shiprocket delivery.
               </p>
@@ -710,7 +769,7 @@ const Checkout = () => {
           <button
             type="button"
             onClick={handleSubmit}
-            className="mt-4 mb-8 w-full rounded-md bg-gray-900 px-6 py-3 font-medium text-white"
+            className="mt-4 mb-8 w-full rounded-md bg-gray-900 px-6 py-3 font-medium text-white hover:bg-gray-600 "
           >
             Place Order
           </button>

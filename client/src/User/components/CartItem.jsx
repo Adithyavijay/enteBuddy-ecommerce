@@ -6,7 +6,7 @@ import { FiTrash2 } from "react-icons/fi";
 
 const CartItem = ({ item }) => {
   const { removeFromCart, addToCart, decreaseCart } = useContext(CartContext);
-  console.log("item : ",item)
+  
   // destructure item
   const { _id, primaryImage, productName, price, quantity,realPrice } = item;
   let [discountPrice, setDiscountPrice] = useState(null);
@@ -30,7 +30,7 @@ const CartItem = ({ item }) => {
             <div>
               <Link
                 to={`/product/${_id}`}
-                className="uppercase  text-xl  max-w-[240px] hover:underline pb-2 pl-4 font-medium"
+                className="uppercase  text-lg  max-w-[240px] hover:underline pb-2 pl-4 font-medium"
               >
                 {productName}
               </Link>

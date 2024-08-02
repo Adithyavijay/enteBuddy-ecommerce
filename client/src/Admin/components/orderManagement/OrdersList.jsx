@@ -12,10 +12,12 @@ function OrdersList() {
   const [currentPage, setCurrentPage] = useState(() => {
     return localStorage.getItem("adminOrderPage") || 1;
   });
-  const { adminId, setOrderData, handleOrderData, logoutAdmin } = useContext(AdminContext);
+  const { adminId, setOrderData, handleOrderData, logoutAdmin, setSideBar } = useContext(AdminContext);
 
   const navigate = useNavigate();
   useEffect(() => {
+    setSideBar(false)
+
     if (!adminId) {
       navigate("/admin/signin");
     }
@@ -28,7 +30,7 @@ function OrdersList() {
         if (response.ok) {
           let result = await response.json();
           setOrders(result.allOrders);
-          let totalPages = Math.ceil(result.allOrders.length / 1);
+          let totalPages = Math.ceil(result.allOrders.length / 5);
           setTotalPages(totalPages);
           let page = parseInt(currentPage)
           let newOrders = result.allOrders.slice((page - 1) * 5 ,page * 5);
@@ -74,7 +76,7 @@ function OrdersList() {
   };
 
   return (
-    <div className="bg-white">
+    <div className="bg-white h-screen">
       <Navbar />
       <SideBar />
       <section className=" h-full">
