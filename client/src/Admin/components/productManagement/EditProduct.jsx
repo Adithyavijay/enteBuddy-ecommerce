@@ -36,8 +36,10 @@ const EditProduct = ({
         [name]: e.target.files,
       }));
     } else if (name == "category") {
+      console.log("working")
       value = value.charAt(0).toUpperCase() + value.slice(1);
-      setProductData((previous) => ({
+      console.log(value)
+      setUpdateData((previous) => ({
         ...previous,
         [name]: value,
       }));
