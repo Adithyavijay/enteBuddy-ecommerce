@@ -37,7 +37,8 @@ const AddProduct = ({
   const [updateIcon, setUpdateIcon] = useState(() => {});
 
   const handleProductData = (e) => {
-    const { name, value } = e.target;
+    let { name, value } = e.target;
+
     if (name == "primaryImage") {
       setProductData((previous) => ({
         ...previous,
@@ -52,6 +53,12 @@ const AddProduct = ({
       setProductData((previous) => ({
         ...previous,
         [name]: e.target.files,
+      }));
+    } else if (name == "category") {
+      value = value.charAt(0).toUpperCase() + value.slice(1);
+      setProductData((previous) => ({
+        ...previous,
+        [name]: value,
       }));
     } else {
       setProductData((previous) => ({

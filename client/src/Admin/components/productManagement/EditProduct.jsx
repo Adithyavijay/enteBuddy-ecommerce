@@ -21,8 +21,7 @@ const EditProduct = ({
     }
   }, [editingProduct]);
   const handleProductData = (e) => {
-    const { name, value } = e.target;
-    console.log(name , " : ", value)
+    let { name, value } = e.target;
     if (name == "primaryImage") {
       setUpdateData((prev) => ({
         ...prev,
@@ -35,6 +34,12 @@ const EditProduct = ({
       setUpdateData((prev) => ({
         ...prev,
         [name]: e.target.files,
+      }));
+    } else if (name == "category") {
+      value = value.charAt(0).toUpperCase() + value.slice(1);
+      setProductData((previous) => ({
+        ...previous,
+        [name]: value,
       }));
     } else {
       setUpdateData((prev) => ({
@@ -139,7 +144,7 @@ const EditProduct = ({
         "quantity",
         "discount",
         "primaryImage",
-        "category"
+        "category",
       ];
       // Append keys to FormData object
       keys.forEach((key) => {

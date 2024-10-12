@@ -19,7 +19,6 @@
   const LoginModel = () => {
       const [otp, setOtp] = useState("");
       const [ph, setPh] = useState("");
-      console.log("length : ",ph.length , ph)
       const [loading, setLoading] = useState("");
       const [showOtp, setShowOtp] = useState("");
       const [user, setUser] = useState(null);
