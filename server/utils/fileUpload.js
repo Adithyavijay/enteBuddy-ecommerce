@@ -26,14 +26,14 @@ const storage = multer.diskStorage({
     }
 
     //   if (file.fieldname == "primaryImage") {
-    //   cb(null,"C:/Users/ASWIN/Documents/KD/enteBuddy-ecommerce/server/Public/uploads/primaryImages");
+    //   cb(null,"C:/Users/krish/Documents/entebuddy/enteBuddy-ecommerce/server/Public/uploads/primaryImages");
     // } else if (file.fieldname == "secondaryImages") {
-    //   cb(null, "C:/Users/ASWIN/Documents/KD/enteBuddy-ecommerce/server/Public/uploads/secondaryImages");
+    //   cb(null, "C:/Users/krish/Documents/entebuddy/enteBuddy-ecommerce/server/Public/uploads/secondaryImages");
     // } else if (file.fieldname == "bannerImage") {
-    //   cb(null, "C:/Users/ASWIN/Documents/KD/enteBuddy-ecommerce/server/Public/uploads/bannerImages");
+    //   cb(null, "C:/Users/krish/Documents/entebuddy/enteBuddy-ecommerce/server/Public/uploads/bannerImages");
 
     // } else if(file.fieldname == 'icons'){
-    //   cb(null, "C:/Users/ASWIN/Documents/KD/enteBuddy-ecommerce/server/Public/uploads/icons");
+    //   cb(null, "C:/Users/krish/Documents/entebuddy/enteBuddy-ecommerce/server/Public/uploads/icons");
     // }
     // else {
     //   cb(new Error("Unexpected field"));

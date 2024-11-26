@@ -48,14 +48,14 @@ const OrderTracking = () => {
         <div className=" flex h-full flex-col overflow-hidden rounded-2xl bg-white text-gray-600 shadow-lg ring-1 ring-gray-200 md:max-w-screen-md mx-auto ">
           {/* Products Section */}
           <div className="font-poppins text-center text-sm text-black border-b border-gray-200 py-8 ">
-           <p> ORDER ID : {order._id}</p>
-           <p >TOTAL : ₹ {order.sellingPrice}</p>
+            <p> ORDER ID : {order._id}</p>
+            <p>TOTAL : ₹ {order.sellingPrice}</p>
           </div>
           {order.products &&
             order.products.map((product) => (
               <section
                 className="pt-6 md:pt-3 pb-1"
-                key={product._id._id + Math.random()}
+                key={ Math.random()}
               >
                 <div className="py-3 px-8 font-mono text-lg flex justify-between border-b border-gray-200">
                   <div className="desc">
@@ -64,13 +64,17 @@ const OrderTracking = () => {
                     <div>₹ {product.price}</div>
                   </div>
                   <div className="w-24 flex justify-center items-center">
-                    <img
-                      src={
-                        API + product._id.primaryImage.path.split("server")[1]
-                      }
-                      alt="massager image"
-                      className="w-full h-full object-fit"
-                    />
+                    {product && product._id ? (
+                      <img
+                        src={
+                          API + product._id.primaryImage.path.split("server")[1]
+                        }
+                        alt="massager image"
+                        className="w-full h-full object-fit"
+                      />
+                    ) : (
+                      ""
+                    )}
                   </div>
                 </div>
               </section>

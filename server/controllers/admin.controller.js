@@ -7,6 +7,7 @@ import User from "../models/user.model.js";
 import coupon from "../models/coupons.model.js";
 import order from "../models/order.model.js";
 import icons from "../models/productIcons.model.js";
+import cart from "../models/cart.model.js";
 
 export const adminSignin = async (req, res, next) => {
   const { email, password } = req.body;
@@ -75,8 +76,8 @@ export const uploadProduct = async (req, res, next) => {
     if (req.body.color) {
       colors = req.body.color.split(",");
     }
-    let productFeatures = null
-    let serviceFeatures = null
+    let productFeatures = null;
+    let serviceFeatures = null;
     if (req.body.productFeatures) {
       productFeatures = JSON.parse(req.body.productFeatures);
     }
@@ -140,13 +141,13 @@ export const updateProduct = async (req, res, next) => {
     if (req.body.color) {
       colors = req.body.color.split(",");
     }
-    let productFeatures
-    let serviceFeatures
-    if(req.body.productFeatures){
-      productFeatures = JSON.parse(req.body.productFeatures)
+    let productFeatures;
+    let serviceFeatures;
+    if (req.body.productFeatures) {
+      productFeatures = JSON.parse(req.body.productFeatures);
     }
-    if(req.body.serviceFeatures){
-      serviceFeatures = JSON.parse(req.body.serviceFeatures)
+    if (req.body.serviceFeatures) {
+      serviceFeatures = JSON.parse(req.body.serviceFeatures);
     }
 
     const update = {
@@ -161,9 +162,10 @@ export const updateProduct = async (req, res, next) => {
       discount: req.body.discount,
       primaryImage: primaryImage,
       secondaryImages: secondaryImages,
-      productFeatures:productFeatures,
-      serviceFeatures:serviceFeatures
+      productFeatures: productFeatures,
+      serviceFeatures: serviceFeatures,
     };
+    console.log(update)
     await product.updateOne({ _id: productId }, { $set: update });
     res.status(200).json({ "product updated with id :": productId });
   } catch (err) {
@@ -175,6 +177,7 @@ export const deleteProduct = async (req, res, next) => {
   try {
     const productId = req.body.productId;
     await product.deleteOne({ _id: productId });
+    await cart.updateMany({}, { $pull: { items: { _id: productId } } });
     res.status(200).json({ "product removed with id : ": productId });
   } catch (err) {
     next(err);

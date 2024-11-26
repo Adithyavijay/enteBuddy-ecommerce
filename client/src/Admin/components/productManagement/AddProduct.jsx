@@ -5,6 +5,7 @@ import validateProductData from "./validateProductFrom";
 import AdminContext from "../../context/AdminContext";
 import { useNavigate } from "react-router-dom";
 import IconsList from "./IconsList";
+import toast from "react-hot-toast";
 
 const AddProduct = ({
   productForm,
@@ -36,7 +37,8 @@ const AddProduct = ({
   const [updateIcon, setUpdateIcon] = useState(() => {});
 
   const handleProductData = (e) => {
-    const { name, value } = e.target;
+    let { name, value } = e.target;
+
     if (name == "primaryImage") {
       setProductData((previous) => ({
         ...previous,
@@ -51,6 +53,12 @@ const AddProduct = ({
       setProductData((previous) => ({
         ...previous,
         [name]: e.target.files,
+      }));
+    } else if (name == "category") {
+      value = value.charAt(0).toUpperCase() + value.slice(1);
+      setProductData((previous) => ({
+        ...previous,
+        [name]: value,
       }));
     } else {
       setProductData((previous) => ({
@@ -107,20 +115,20 @@ const AddProduct = ({
 
       if (productData.serviceFeature1) {
         serviceFeatures.push(productData.serviceFeature1);
-        featureIcons.push(serviceIcon1);
+        serviceFeatureIcons.push(serviceIcon1);
       }
       if (productData.serviceFeature2) {
         serviceFeatures.push(productData.serviceFeature2);
-        featureIcons.push(serviceIcon2);
+        serviceFeatureIcons.push(serviceIcon2);
       }
       if (productData.serviceFeature3) {
         serviceFeatures.push(productData.serviceFeature3);
-        featureIcons.push(serviceIcon3);
+        serviceFeatureIcons.push(serviceIcon3);
       }
 
       if (productData.serviceFeature4) {
         serviceFeatures.push(productData.serviceFeature4);
-        featureIcons.push(serviceIcon4);
+        serviceFeatureIcons.push(serviceIcon4);
       }
 
       let serviceFeaturesWithIcons = [];
@@ -134,7 +142,6 @@ const AddProduct = ({
       }
 
       let serializedServiceFeatures = JSON.stringify(serviceFeaturesWithIcons);
-
       const formData = new FormData();
       formData.append("title", productData.title);
       formData.append("category", productData.category);
@@ -152,30 +159,43 @@ const AddProduct = ({
       formData.append("productFeatures", serializedProductFeatures);
       formData.append("serviceFeatures", serializedServiceFeatures);
 
-      const response = await fetch(`/api/admin/addProduct/${adminId}`, {
-        method: "post",
-        body: formData,
-        credentials: "include",
-      });
+      const addingProduct = async () => {
+        new Promise(async (resolve, reject) => {
+          const response = await fetch(`/api/admin/addProduct/${adminId}`, {
+            method: "post",
+            body: formData,
+            credentials: "include",
+          });
 
-      if (response.ok) {
-        setProductData(null);
-        setImageUrl(null);
-        showProductForm(false);
-        setFetchProduct(!fetchProduct);
-        setIcon1(null);
-        setIcon2(null);
-        setIcon3(null);
-        setIcon4(null);
-        setServiceIcon1(null);
-        setServiceIcon2(null);
-        setServiceIcon3(null);
-        setServiceIcon4(null);
-      } else if (response.status == 401 || response.status == 403) {
-        logoutAdmin();
-      } else {
-        console.log("failed to add product : ", response);
-      }
+          if (response.ok) {
+            setProductData(null);
+            setImageUrl(null);
+            showProductForm(false);
+            setFetchProduct(!fetchProduct);
+            setIcon1(null);
+            setIcon2(null);
+            setIcon3(null);
+            setIcon4(null);
+            setServiceIcon1(null);
+            setServiceIcon2(null);
+            setServiceIcon3(null);
+            setServiceIcon4(null);
+            resolve();
+          } else if (response.status == 401 || response.status == 403) {
+            logoutAdmin();
+            reject();
+          } else {
+            console.log("failed to add product : ", response);
+            reject();
+          }
+        });
+      };
+
+      toast.promise(addingProduct(), {
+        loading: "Adding new product...",
+        success: <b>New product added.</b>,
+        error: <b>Error in adding product.</b>,
+      });
     }
   };
 
