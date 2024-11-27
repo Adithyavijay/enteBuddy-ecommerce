@@ -67,9 +67,9 @@ const Header = (cookies) => {
           visible ? "" : "transform -translate-y-full "
         } `}
       >  
-      
+      Hello this is Adithya vijay
         <div className="navbar-start"> 
-      
+        
           <div className="dropdown ">
             <div
               tabIndex={0}
@@ -84,7 +84,7 @@ const Header = (cookies) => {
                 viewBox="0 0 24 24"
                 stroke="currentColor"
               >
-                <path2
+                <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth="2"
