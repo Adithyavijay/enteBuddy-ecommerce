@@ -30,7 +30,8 @@ jobs:
             git pull origin main
 
             # Step 1: Build the Client (Frontend)
-            cd client
+            cd client 
+            which node
             node -v || { echo "Node.js is not installed!"; exit 1; }
             node -v 
             pnpm -v || { echo "pnpm is not installed "; exit ; } 
