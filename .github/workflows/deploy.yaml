@@ -53,7 +53,7 @@ jobs:
             # Step 2: Update the Server (Backend)
             cd ../
             pnpm install
-            cp -r public /var/www/enteBuddy-ecommerce/server/public
+            cp -r Public /var/www/enteBuddy-ecommerce/server/Public
 
             # Step 3: Restart services
             pm2 restart all
