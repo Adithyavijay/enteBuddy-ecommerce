@@ -67,7 +67,6 @@ const Header = (cookies) => {
           visible ? "" : "transform -translate-y-full "
         } `}
       > 
-  This app is now currently using the github repo of adithya vijay
         <div className="navbar-start">
           <div className="dropdown ">
             <div
