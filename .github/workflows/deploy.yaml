@@ -25,7 +25,7 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no root@77.37.47.53<< EOF
            cd /root/enteBuddy-ecommerce/
-
+            echo $PATH
             # Pull the latest changes
             git pull origin main
 
