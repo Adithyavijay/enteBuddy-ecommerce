@@ -3,12 +3,45 @@ name: Deploy to Server
 on:
   push:
     branches:
-      - main  # Adjust this if your branch is not named 'main'
+      - main  
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest  # The GitHub-hosted runner
+    runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Checkout code
       - name: Checkout code
         uses: actions/checkout@v3
+
+      # Step 2: Set up SSH
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      # Step 3: Deploy changes to server
+      - name: Deploy to Server
+        run: |
+          ssh -o StrictHostKeyChecking=no root@ssh root@77.37.47.53<< EOF
+           cd /root/enteBuddy-ecommerce/
+
+            # Pull the latest changes
+            git pull origin main
+
+            # Step 1: Build the Client (Frontend)
+            cd client
+            pnpm install
+            pnpm run build
+            rm -rf /var/www/enteBuddy-ecommerce/client/dist/*
+            cp -r dist/* /var/www/enteBuddy-ecommerce/client/dist/
+
+            # Step 2: Update the Server (Backend)
+            cd ../
+            pnpm install
+            cp -r public /var/www/enteBuddy-ecommerce/server/public
+
+            # Step 3: Restart services
+            pm2 restart all
+            sudo systemctl restart nginx
+          EOF
