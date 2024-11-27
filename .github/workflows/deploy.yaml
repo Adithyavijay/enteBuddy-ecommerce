@@ -25,10 +25,14 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no root@77.37.47.53<< EOF 
 
-           export NVM_DIR="/root/.nvm"
-            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # Load nvm
-            [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # Load nvm bash_completion
+          export NVM_DIR="/root/.nvm"
+          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # Load nvm
+          [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # Optional
+
+          echo "PATH: $PATH"
+            which node || { echo "Node.js binary not found in PATH!"; exit 1; }
             node -v || { echo "Node.js is not installed!"; exit 1; }
+            which pnpm || { echo "pnpm binary not found in PATH!"; exit 1; }
             pnpm -v || { echo "pnpm is not installed!"; exit 1; }
           
            cd /root/enteBuddy-ecommerce/
