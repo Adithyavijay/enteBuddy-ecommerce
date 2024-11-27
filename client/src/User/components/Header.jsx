@@ -67,7 +67,7 @@ const Header = (cookies) => {
           visible ? "" : "transform -translate-y-full "
         } `}
       > 
-      now you are being hosted by adithya
+    jkhjkhfkjhsjkfhjksdhfjksdhjkf
         <div className="navbar-start">
           <div className="dropdown ">
             <div
