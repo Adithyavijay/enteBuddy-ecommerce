@@ -34,7 +34,7 @@ jobs:
             pnpm  build 
             mkdir /root/hello-kitty
             rm -rf /var/www/enteBuddy-ecommerce/client/dist/*
-            cp -r  /root/enteBuddy-ecommerce/client/dist/  /var/www/enteBuddy-ecommerce/client/
+            cp -r  /root/enteBuddy-ecommerce/client/dist/*  /var/www/enteBuddy-ecommerce/client/
 
             # Step 2: Update the Server (Backend)
             cd ../
