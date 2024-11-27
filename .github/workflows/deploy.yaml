@@ -31,10 +31,9 @@ jobs:
 
             # Step 1: Build the Client (Frontend)
             cd client
-            pnpm install
-            pnpm run build
+            pnpm  build
             rm -rf /var/www/enteBuddy-ecommerce/client/dist/*
-            cp -r dist/* /var/www/enteBuddy-ecommerce/client/dist/
+            cp -r /root/enteBuddy-ecommerce/client/dist/* /var/www/enteBuddy-ecommerce/client/dist/
 
             # Step 2: Update the Server (Backend)
             cd ../
