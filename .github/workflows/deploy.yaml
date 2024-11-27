@@ -26,13 +26,6 @@ jobs:
           ssh -o StrictHostKeyChecking=no root@77.37.47.53<< EOF  
           
            export PATH="/root/.nvm/versions/node/v20.15.0/bin:$PATH" # Add Node.js binary explicitly
-          echo "PATH: $PATH"
-          which node || { echo "Node.js binary not found in PATH!"; exit 1; }
-          node -v || { echo "Node.js is not installed!"; exit 1; }
-          which pnpm || { echo "pnpm binary not found in PATH!"; exit 1; }
-          pnpm -v || { echo "pnpm is not installed!"; exit 1; }
-
-          
            cd /root/enteBuddy-ecommerce/
             echo $PATH
             # Pull the latest changes
