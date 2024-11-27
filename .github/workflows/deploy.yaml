@@ -53,8 +53,6 @@ jobs:
             # Step 2: Update the Server (Backend)
             cd ../
             pnpm install
-            cp -r server/Public /var/www/enteBuddy-ecommerce/server/Public
-
             # Step 3: Restart services
             pm2 restart all
             sudo systemctl restart nginx
