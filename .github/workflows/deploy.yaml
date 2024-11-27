@@ -24,7 +24,6 @@ jobs:
       - name: Deploy to Server
         run: |
           ssh -o StrictHostKeyChecking=no root@77.37.47.53<< EOF  
-          export NVM_DIR="/root/.nvm"
           
            export PATH="/root/.nvm/versions/node/v20.15.0/bin:$PATH" # Add Node.js binary explicitly
           echo "PATH: $PATH"
