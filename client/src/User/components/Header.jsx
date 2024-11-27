@@ -69,8 +69,7 @@ const Header = (cookies) => {
       >  
       Hello this is Adithya vijay
         <div className="navbar-start"> 
-        Hello this is Adithya vijay
-        Hello this is Adithya vijay  Hello this is Adithya vijay  Hello this is Adithya vijay  Hello this is Adithya vijay  Hello this is Adithya vijay
+      
           <div className="dropdown ">
             <div
               tabIndex={0}
