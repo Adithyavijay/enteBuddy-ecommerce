@@ -23,7 +23,7 @@ jobs:
       # Step 3: Deploy changes to server
       - name: Deploy to Server
         run: |
-          ssh -o StrictHostKeyChecking=no root@ssh root@77.37.47.53<< EOF
+          ssh -o StrictHostKeyChecking=no root@77.37.47.53<< EOF
            cd /root/enteBuddy-ecommerce/
 
             # Pull the latest changes
