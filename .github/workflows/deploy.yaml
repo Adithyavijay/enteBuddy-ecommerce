@@ -48,7 +48,7 @@ jobs:
             pnpm  build 
           
             rm -rf /var/www/enteBuddy-ecommerce/client/dist/*
-            cp -r  /root/enteBuddy-ecommerce/client/dist/*  /var/www/enteBuddy-ecommerce/client/
+            cp -r  /root/enteBuddy-ecommerce/client/dist/*  /var/www/enteBuddy-ecommerce/client/dist
 
             # Step 2: Update the Server (Backend)
             cd ../
