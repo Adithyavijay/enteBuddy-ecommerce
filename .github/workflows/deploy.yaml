@@ -23,7 +23,14 @@ jobs:
       # Step 3: Deploy changes to server
       - name: Deploy to Server
         run: |
-          ssh -o StrictHostKeyChecking=no root@77.37.47.53<< EOF
+          ssh -o StrictHostKeyChecking=no root@77.37.47.53<< EOF 
+
+           export NVM_DIR="/root/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # Load nvm
+            [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # Load nvm bash_completion
+            node -v || { echo "Node.js is not installed!"; exit 1; }
+            pnpm -v || { echo "pnpm is not installed!"; exit 1; }
+          
            cd /root/enteBuddy-ecommerce/
             echo $PATH
             # Pull the latest changes
@@ -32,9 +39,6 @@ jobs:
             # Step 1: Build the Client (Frontend)
             cd client 
             which node
-            node -v || { echo "Node.js is not installed!"; exit 1; }
-            node -v 
-            pnpm -v || { echo "pnpm is not installed "; exit ; } 
             
             install pnpm
             pnpm  build 
