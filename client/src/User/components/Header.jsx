@@ -66,7 +66,8 @@ const Header = (cookies) => {
         className={`navbar bg-hero2 bg-tertiary bg-contain z-10 fixed transition-transform duration-300 ${
           visible ? "" : "transform -translate-y-full "
         } `}
-      >
+      > 
+      now you are being hosted by adithya
         <div className="navbar-start">
           <div className="dropdown ">
             <div
