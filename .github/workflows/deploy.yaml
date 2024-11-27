@@ -31,8 +31,13 @@ jobs:
 
             # Step 1: Build the Client (Frontend)
             cd client
+            node -v || { echo "Node.js is not installed!"; exit 1; }
+            node -v 
+            pnpm -v || { echo "pnpm is not installed "; exit ; } 
+            
+            install pnpm
             pnpm  build 
-            mkdir /root/hello-kitty
+          
             rm -rf /var/www/enteBuddy-ecommerce/client/dist/*
             cp -r  /root/enteBuddy-ecommerce/client/dist/*  /var/www/enteBuddy-ecommerce/client/
 
