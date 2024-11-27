@@ -1,0 +1,14 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches:
+      - main  # Adjust this if your branch is not named 'main'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest  # The GitHub-hosted runner
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
