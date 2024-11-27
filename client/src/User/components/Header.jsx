@@ -280,14 +280,6 @@ const Header = (cookies) => {
       </div> */}
       {showModal && <LoginModel />}
 
-      {aboutModal && (
-        <AboutUs
-          onClose={() => {
-            setAboutModal(false);
-          }}
-        />
-      )}
-
       {contactModal && (
         <ContactUs
           onClose={() => {
