@@ -27,14 +27,12 @@ const Footer = () => {
               {" "}
               <div className="mb-[10px]">terms and conditions</div>
             </Link>
-            <div
-              onClick={() => {
-                setAboutModal(!aboutModal);
-              }}
+            <Link
+              to={"/about-us"}
               className="cursor-pointer mb-[10px]"
             >
               About us{" "}
-            </div>
+            </Link>
             <Link to="/shippingPolicy">
               {" "}
               <div className="mb-2 cursor-pointer">
@@ -99,13 +97,6 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      {aboutModal && (
-        <AboutUs
-          onClose={() => {
-            setAboutModal(false);
-          }}
-        />
-      )}
 
       {contactModal && (
         <ContactUs

@@ -11,6 +11,17 @@ import AboutUs from "./AboutUs";
 import ContactUs from "./ContactUs";
 import { LogContext } from "../contexts/LogContext";
 import Logout from "./Logout";
+import {
+  RiInformationLine,
+  RiCustomerService2Line,
+  RiShoppingBag3Line,
+  RiCloseLine,
+} from "react-icons/ri";
+import { TiThMenuOutline } from "react-icons/ti";
+import { RiMenuFoldLine } from "react-icons/ri";
+import { HiOutlineMenuAlt3 } from "react-icons/hi";
+import { IoMenuOutline } from "react-icons/io5";
+import { CgMenuMotion } from "react-icons/cg";
 
 const Header = (cookies) => {
   const { itemAmount, handleCart } = useContext(CartContext);
@@ -23,6 +34,7 @@ const Header = (cookies) => {
   const [aboutModal, setAboutModal] = useState(false);
   const [contactModal, setContactModal] = useState(false);
   const [leftDropdown, setLeftDropdown] = useState(false);
+  const [leftSidebar, setLeftSidebar] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -43,7 +55,12 @@ const Header = (cookies) => {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [prevScrollPos]);
+  }, [prevScrollPos]); 
+
+
+  useEffect(()=>{
+    document.body.style.overflow = leftSidebar ? "hidden" : "auto";
+  },[leftSidebar])
 
   const toggleMenu = () => {
     setDropDown(!dropDown);
@@ -66,8 +83,8 @@ const Header = (cookies) => {
         className={`navbar bg-hero2 bg-tertiary bg-contain z-10 fixed transition-transform duration-300 ${
           visible ? "" : "transform -translate-y-full "
         } `}
-      >  
-        <div className="navbar-start">
+      >
+        {/* <div className="navbar-start">
           <div className="dropdown ">
             <div
               tabIndex={0}
@@ -128,7 +145,70 @@ const Header = (cookies) => {
               </li>
             </ul>
           </div>
+        </div> */}
+        <div
+          className="navbar-start cursor-pointer ml-4"
+          onClick={() => setLeftSidebar(true)}
+        >
+          <CgMenuMotion className="text-yellow-500 w-7 h-7 hover:rotate-180 transition-all duration-300" />
         </div>
+        <aside
+          className={`fixed z-50  inset-y-0 left-0 w-80 bg-gradient-to-b from-white to-yellow-50 shadow-xl transform transition-transform duration-300 ${
+            leftSidebar ? "translate-x-0" : "-translate-x-full"
+          } `}
+        >
+          <div className="bg-black  inset-0"></div>
+          <div className="flex flex-col h-full w-full">
+            {/* Header with full width and spread items */}
+            <div className="w-full border-b border-gray-200">
+              <div className="flex justify-between items-center px-6 py-4">
+                <div className="flex items-center gap-3">
+                  <img src={logo} alt="logo" className="h-8" />
+                </div>
+                <button className="hover:bg-yellow-100 p-2 rounded-lg transition-colors">
+                  <RiCloseLine
+                    className="w-6 h-6 text-gray-600"
+                    onClick={() => setLeftSidebar(false)}
+                  />
+                </button>
+              </div>
+            </div>
+
+            {/* Navigation Section */}
+            <nav className="flex-1 px-4 mt-6">
+              <div className="space-y-2">
+                <Link to={"/about-us"}   onClick={() => {setTimeout(() => leftSidebar(false), 100); }} 
+                 className="flex items-center w-full p-4 text-gray-700 hover:bg-yellow-100 rounded-xl transition-all duration-200 group">
+                  <RiInformationLine className="w-5 h-5 group-hover:text-yellow-600 transition-colors" />
+                  <span className="ml-4 font-medium text-sm group-hover:translate-x-1 transition-transform">
+                    About Us
+                  </span>
+                </Link>
+
+                <button onClick={()=>{setContactModal(true) ; setLeftSidebar(false)}} className="flex items-center w-full p-4 text-gray-700 hover:bg-yellow-100 rounded-xl transition-all duration-200 group">
+                  <RiCustomerService2Line className="w-5 h-5 group-hover:text-yellow-600 transition-colors" />
+                  <span className="ml-4 font-medium text-sm group-hover:translate-x-1 transition-transform">
+                    Contact
+                  </span>
+                </button>
+
+                <Link  to={`/fetchOrders/${userId}`} onClick={handleOrder} className="flex items-center w-full p-4 text-gray-700 hover:bg-yellow-100 rounded-xl transition-all duration-200 group">
+                  <RiShoppingBag3Line className="w-5 h-5 group-hover:text-yellow-600 transition-colors" />
+                  <span className="ml-4 font-medium text-sm group-hover:translate-x-1 transition-transform">
+                    Orders
+                  </span>
+                </Link>
+              </div>
+            </nav>
+
+            {/* Optional: Footer Section */}
+            <div className="p-4 mt-auto">
+              <div className="p-4 bg-yellow-50 rounded-xl">
+                <p className="text-sm text-gray-600">© 2024 enteBuddy</p>
+              </div>
+            </div>
+          </div>
+        </aside>
         <div className="navbar-center">
           <Link to="/" className="btn btn-ghost text-xl">
             <img src={logo} className="w-15 h-10" />
@@ -180,7 +260,10 @@ const Header = (cookies) => {
             <div className="indicator">
               <FaShoppingCart className="text-2xl text-yellow-400" />
               {itemAmount > 0 && (
-                <span className="badge badge-sm badge-secondary  indicator-item" style={{backgroundColor:"#DE5B9D"}}>
+                <span
+                  className="badge badge-sm badge-secondary  indicator-item"
+                  style={{ backgroundColor: "#DE5B9D" }}
+                >
                   {itemAmount}
                 </span>
               )}

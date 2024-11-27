@@ -147,12 +147,12 @@
           <div
               ref={modalRef}
               onClick={closeModal}
-              className="z-10 text-white fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex items-center justify-center "
+              className="z-10 text-white fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex items-center justify-center px-12"
           >
               <div className="flex flex-col ">
                   <div id="recaptcha-container"></div>
                   <Toaster toastOptions={{ duration: 4000 }} />
-                  <button onClick={onClose} className="place-self-end">
+                  <button onClick={onClose} className=" place-self-end pr-4 pb-1 ">
                       <IoCloseCircleOutline />
                   </button>
                   <div

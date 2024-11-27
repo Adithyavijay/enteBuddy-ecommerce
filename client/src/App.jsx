@@ -32,6 +32,7 @@ import RefundPolicy from "./User/pages/RefundPolicy";
 import ShippingPolicy from "./User/pages/ShppingPolicy";
 import OrdersList from "./Admin/components/orderManagement/OrdersList";
 import OrderDetails from "./Admin/components/orderManagement/OrderDetails";
+import AboutUs from "./User/components/AboutUs";
 
 
 const AppLayout =()=>{ 
@@ -81,6 +82,11 @@ const router = createBrowserRouter([
     {
       path : '/shippingPolicy',
       element : <ShippingPolicy/>
+    } ,
+
+    {
+      path : '/about-us',
+      element :<AboutUs/>
     }
     ]
   },
