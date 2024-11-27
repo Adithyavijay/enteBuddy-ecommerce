@@ -67,9 +67,7 @@ const Header = (cookies) => {
           visible ? "" : "transform -translate-y-full "
         } `}
       >  
-      Hello this is Adithya vijay
-        <div className="navbar-start"> 
-        
+        <div className="navbar-start">
           <div className="dropdown ">
             <div
               tabIndex={0}
