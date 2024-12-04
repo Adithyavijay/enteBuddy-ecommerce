@@ -86,6 +86,7 @@ export const uploadProduct = async (req, res, next) => {
     }
     const newProduct = new product({
       title: req.body.title,
+      subHeading : req.body.subHeading,
       category: req.body.category,
       description: req.body.description,
       brand: req.body.brand || "EnteBuddy",
@@ -152,6 +153,7 @@ export const updateProduct = async (req, res, next) => {
 
     const update = {
       title: req.body.title,
+      subHeading: req.body.subHeading,
       category: req.body.category,
       description: req.body.description,
       brand: req.body.brand || "EnteBuddy",
@@ -165,7 +167,7 @@ export const updateProduct = async (req, res, next) => {
       productFeatures: productFeatures,
       serviceFeatures: serviceFeatures,
     };
-    console.log(update)
+    
     await product.updateOne({ _id: productId }, { $set: update });
     res.status(200).json({ "product updated with id :": productId });
   } catch (err) {

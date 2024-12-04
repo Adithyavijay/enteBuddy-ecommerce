@@ -6,6 +6,10 @@ const productSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    subHeading : {
+      type : String ,
+      required : true
+    } ,
     category: {
       type: String,
       requried: true,

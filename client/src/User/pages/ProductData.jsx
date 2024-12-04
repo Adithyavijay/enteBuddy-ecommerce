@@ -33,6 +33,7 @@ const ProductData = () => {
   const {
     title,
     primaryImage,
+    subHeading ,
     description,
     price,
     category,
@@ -42,6 +43,7 @@ const ProductData = () => {
     serviceFeatures,
   } = product;
 
+  
   return (
     <div>
       <div className="flex flex-col md:flex-row pt-[65px] md:pb-1 md:w-screen md:h-screen  items-center overflow-visible bg font">
@@ -68,8 +70,8 @@ const ProductData = () => {
           <div className="font-medium font-poppins text-[30px] pt-2 md:text-[50px]">
             {title}
           </div>
-          <div className="font-medium font-poppins text-[25px] md:text-[32px] text-primary uppercase ">
-            {category}
+          <div className="font-bold font-poppins text-base  md:text-xl text-primary uppercase ">
+            {subHeading}
           </div>
 
           <div className="py-1 font-medium font-poppins text-sm md:text-[16px]">

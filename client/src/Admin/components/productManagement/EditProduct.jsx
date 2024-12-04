@@ -36,7 +36,6 @@ const EditProduct = ({
         [name]: e.target.files,
       }));
     } else if (name == "category") {
-      console.log("working")
       value = value.charAt(0).toUpperCase() + value.slice(1);
       console.log(value)
       setUpdateData((previous) => ({
@@ -68,7 +67,7 @@ const EditProduct = ({
   const handleSubmit = async () => {
     try {
       const formData = new FormData();
-
+      
       let productFeatures = editingProduct.productFeatures;
       if (updateData.productFeature1) {
         let feature = {
@@ -140,7 +139,8 @@ const EditProduct = ({
       // Define keys that need to be appended
       const keys = [
         "title",
-        "description",
+        "subHeading",
+        "description", 
         "color",
         "price",
         "quantity",
@@ -238,6 +238,18 @@ const EditProduct = ({
                         className="ms-3 h-10 border mt-1 rounded px-4 bg-gray-50 uppercase text-xs"
                         onChange={handleProductData}
                         value={updateData.category ? updateData.category : ""}
+                      />
+                    </div>
+                    <div className="md:col-span-5">
+                      <label htmlFor="category">subHeading</label>
+                      <input
+                        type="text"
+                        name="subHeading"
+                        placeholder="Enter sub Heading"
+                        id="subHeading"
+                        className="ms-3 h-10 border mt-1 rounded px-4 bg-gray-50 uppercase text-xs"
+                        onChange={handleProductData}
+                        value={updateData.subHeading ? updateData.subHeading : ""}
                       />
                     </div>
 

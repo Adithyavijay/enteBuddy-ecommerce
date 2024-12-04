@@ -2,6 +2,7 @@ const validateProductData = (productData, setError) => {
   const {
     title,
     category,
+    subHeading,
     description,
     quantity,
     price,
@@ -24,6 +25,13 @@ const validateProductData = (productData, setError) => {
     setError((previous) => ({
       ...previous,
       category: "Select a category!",
+    }));
+    error = true;
+  }
+  if ( subHeading== "" || !subHeading) {
+    setError((previous) => ({
+      ...previous,
+      subHeading: "Sub heading is required!",
     }));
     error = true;
   }

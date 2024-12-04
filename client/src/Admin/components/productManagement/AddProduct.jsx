@@ -145,6 +145,7 @@ const AddProduct = ({
       const formData = new FormData();
       formData.append("title", productData.title);
       formData.append("category", productData.category);
+      formData.append("subHeading", productData.subHeading);
       formData.append("description", productData.description);
       formData.append("color", productData.color ? productData.color : "");
       formData.append("price", productData.price);
@@ -283,6 +284,30 @@ const AddProduct = ({
                       {productError.category && (
                         <span className="text-red-600 text-xs md:text-sm ms-2">
                           {productError.category}
+                        </span>
+                      )}
+                    </div>
+
+
+                    <div className="md:col-span-5">
+                      <label htmlFor="category">Sub Heading </label>
+                      <input
+                        type="text"
+                        name="subHeading"
+                        placeholder="Enter subHeading"
+                        id="category"
+                        className="ms-3 h-10 border mt-1 rounded px-4 bg-gray-50 uppercase text-xs"
+                        onChange={handleProductData}
+                        value={
+                          productData && productData.subHeading
+                            ? productData.subHeading
+                            : ""
+                        }
+                      />
+
+                      {productError.subHeading&& (
+                        <span className="text-red-600 text-xs md:text-sm ms-2">
+                          {productError.subHeading}
                         </span>
                       )}
                     </div>

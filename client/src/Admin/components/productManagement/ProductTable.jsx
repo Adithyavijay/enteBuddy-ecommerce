@@ -107,6 +107,9 @@ const ProductTable = ({
               <th scope="col" className="px-6 py-3  ">
                 Title
               </th>
+              <th scope="col" className="px-6 py-3  ">
+                Sub Heading
+              </th>
               <th scope="col" className="px-6 py-3 bg-gray-50 ">
                 Colour
               </th>
@@ -139,6 +142,7 @@ const ProductTable = ({
                     />
                   </th>
                   <td className="px-6 py-4 font-medium">{item.title} </td>
+                  <td className="px-6 py-4 font-medium">{item.subHeading} </td>
                   <td className="px-6 py-4 bg-gray-50 ">
                     {item.color ? item.color.join(",") : ""}
                   </td>

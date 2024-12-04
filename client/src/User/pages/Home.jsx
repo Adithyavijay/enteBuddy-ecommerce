@@ -12,7 +12,7 @@ import AgeVerification from "../components/AgeVerification";
 import { AgeVerificationContext } from "../contexts/AgeVerificationContext";
 
 const Home = () => {
-  const { products } = useContext(ProductContext);
+  const { products } = useContext(ProductContext); 
   const { userId } = useContext(userContext);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [isVerified, setIsVerified] = useState(true);
