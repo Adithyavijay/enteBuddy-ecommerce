@@ -9,6 +9,8 @@ import paymentRoute from './routes/payment.route.js'
 import cookieParser from "cookie-parser";
 import Razorpay from "razorpay";
 import path from "path";
+import { fileURLToPath } from "url";
+
 
 dotenv.config();
 const app = express();
@@ -35,13 +37,14 @@ app.use(
   })
 );
 
-export const __dirname = path.dirname(new URL(import.meta.url).pathname);
+
+const fileName = fileURLToPath(import.meta.url)
+const dirName = path.dirname(fileName) 
 
 app.use(express.json());
 app.use(cookieParser());
-// app.use("/Public",express.static('C:/Users/krish/Documents/entebuddy/enteBuddy-ecommerce/server/Public'))
-app.use("/Public", express.static('/var/www/enteBuddy-ecommerce/server/Public')); 
-// app.use("/Public", express.static("C:/Users/ASUS/OneDrive/Desktop/abhi pro/enteBuddy/server/Public")); 
+// app.use("/Public", express.static('/var/www/enteBuddy-ecommerce/server/Public')); 
+app.use("/Public", express.static(process.env.NODE_ENV==='development' ? path.join(dirName, 'Public') : '/var/www/enteBuddy-ecommerce/server/Public') ); 
 app.listen(port, () => console.log("server started at port : ",port));
 
 app.use("/api/user", userRoute);
