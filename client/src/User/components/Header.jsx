@@ -7,7 +7,6 @@ import LoginModel from "./LoginModel";
 import logo from "../img/logo.png";
 import { userContext } from "../contexts/UserContext";
 import { Toaster, toast } from "react-hot-toast";
-import AboutUs from "./AboutUs";
 import ContactUs from "./ContactUs";
 import { LogContext } from "../contexts/LogContext";
 import Logout from "./Logout";
@@ -17,11 +16,8 @@ import {
   RiShoppingBag3Line,
   RiCloseLine,
 } from "react-icons/ri";
-import { TiThMenuOutline } from "react-icons/ti";
-import { RiMenuFoldLine } from "react-icons/ri";
-import { HiOutlineMenuAlt3 } from "react-icons/hi";
-import { IoMenuOutline } from "react-icons/io5";
 import { CgMenuMotion } from "react-icons/cg";
+import { useNavigate } from "react-router-dom";
 
 const Header = (cookies) => {
   const { itemAmount, handleCart } = useContext(CartContext);
@@ -31,10 +27,11 @@ const Header = (cookies) => {
   const [visible, setVisible] = useState(true);
   const [dropDown, setDropDown] = useState(false);
   const { userId } = useContext(userContext);
-  const [aboutModal, setAboutModal] = useState(false);
   const [contactModal, setContactModal] = useState(false);
   const [leftDropdown, setLeftDropdown] = useState(false);
-  const [leftSidebar, setLeftSidebar] = useState(false);
+  const [leftSidebar, setLeftSidebar] = useState(false); 
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     const handleScroll = () => {
@@ -75,7 +72,15 @@ const Header = (cookies) => {
       setShowModal(true);
       toast.error("Please login to continue!!!");
     }
-  };
+  }; 
+
+  const handleNavigation=()=>{
+    setLeftSidebar(false);
+    setTimeout(()=>{
+    navigate("/about-us")
+    },300)
+  }
+
   return (
     <div>
       <Toaster toastOptions={{ duration: 2000 }} />
@@ -84,68 +89,6 @@ const Header = (cookies) => {
           visible ? "" : "transform -translate-y-full "
         } `}
       >
-        {/* <div className="navbar-start">
-          <div className="dropdown ">
-            <div
-              tabIndex={0}
-              role="button"
-              className=" btn btn-ghost btn-circle"
-            >
-              <svg
-                onClick={toggleLeftMenu}
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-7 w-7 text-yellow-400"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M4 6h16M4 12h16M4 18h7"
-                />
-              </svg>
-            </div>
-            <ul
-              tabIndex={0}
-              className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52 font-poppins bg-gradient-to-b from-[#FFFFFF] to-[#FEEE9F] "
-              style={{ display: leftDropdown ? "block" : "none" }}
-            >
-              <li>
-                <Link
-                  className="text-black"
-                  onClick={() => {
-                    setAboutModal(!aboutModal);
-                    setLeftDropdown(!leftDropdown);
-                  }}
-                >
-                  About us
-                </Link>
-              </li>
-              <li className="">
-                <Link
-                  className="text-black"
-                  onClick={() => {
-                    setContactModal(!contactModal);
-                    setLeftDropdown(!leftDropdown);
-                  }}
-                >
-                  Contact us
-                </Link>
-              </li>
-              <li className="">
-                <Link
-                  className="text-black"
-                  to={`/fetchOrders/${userId}`}
-                  onClick={handleOrder}
-                >
-                  Orders
-                </Link>
-              </li>
-            </ul>
-          </div>
-        </div> */}
         <div
           className="navbar-start cursor-pointer ml-4"
           onClick={() => setLeftSidebar(true)}
@@ -177,13 +120,13 @@ const Header = (cookies) => {
             {/* Navigation Section */}
             <nav className="flex-1 px-4 mt-6">
               <div className="space-y-2">
-                <Link to={"/about-us"}   onClick={() => {setTimeout(() => leftSidebar(false), 100); }} 
+                <div onClick={handleNavigation}
                  className="flex items-center w-full p-4 text-gray-700 hover:bg-yellow-100 rounded-xl transition-all duration-200 group">
                   <RiInformationLine className="w-5 h-5 group-hover:text-yellow-600 transition-colors" />
                   <span className="ml-4 font-medium text-sm group-hover:translate-x-1 transition-transform">
                     About Us
                   </span>
-                </Link>
+                </div>
 
                 <button onClick={()=>{setContactModal(true) ; setLeftSidebar(false)}} className="flex items-center w-full p-4 text-gray-700 hover:bg-yellow-100 rounded-xl transition-all duration-200 group">
                   <RiCustomerService2Line className="w-5 h-5 group-hover:text-yellow-600 transition-colors" />

@@ -30,13 +30,13 @@ const CartItem = ({ item }) => {
             <div>
               <Link
                 to={`/product/${_id}`}
-                className="uppercase  text-lg  max-w-[240px] hover:underline pb-2 pl-4 font-medium"
+                className="uppercase  dark:text-black text-lg  max-w-[240px] hover:underline pb-2 pl-4 font-medium"
               >
                 {productName}
               </Link>
 
               <span className="text-red-600 ms-5">
-                <del>₹ {realPrice}</del>
+                <del>₹ {realPrice }</del>
               </span>
             </div>
             {/* remive icon */}
@@ -77,11 +77,11 @@ const CartItem = ({ item }) => {
               </div>
             </div>
             {/* item price */}
-            <div className="flex flex-1 justify-around items-center font-medium text-gray-400">
-              ₹ {price}
+            <div className="flex flex-1 justify-around items-center font-medium text-gray-400 dark:text-black">
+              ₹ {price.toFixed(0)}
             </div>
             {/* final price */}
-            <div className="flex flex-1 justify-end items-center font-bold">
+            <div className="dark:text-black flex flex-1 justify-end items-center font-bold">
               ₹{`${parseFloat(price * quantity).toFixed(0)}`}
             </div>
           </div>

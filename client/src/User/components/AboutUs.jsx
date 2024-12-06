@@ -1,14 +1,15 @@
-import React from 'react';
+import React, { useEffect, useRef ,useState } from 'react';
 import { motion } from 'framer-motion';
 
 const AboutUs = () => {
+
   return (
-    <div className="min-h-screen md:bg-[#2D2A3F] bg-[#3A2D3F] bg-hero2 bg-contain">
+    <div  className="min-h-screen md:bg-[#2D2A3F] bg-[#3A2D3F] bg-hero2 bg-contain">
       {/* Hero Section */}
       <div className="container mx-auto px-4 py-16">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           className="max-w-4xl mx-auto text-center"
         >
@@ -24,8 +25,8 @@ const AboutUs = () => {
         <div className="max-w-4xl mx-auto">
           <motion.div 
             initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.6 }}
             className="bg-[#3A2D3F]/80 backdrop-blur-sm rounded-2xl p-8 md:p-12 shadow-xl border border-secondary/20"
           >
             {/* Mission Statement */}
@@ -54,7 +55,7 @@ const AboutUs = () => {
 
             {/* Location Section */}
             <div className="bg-secondary/5 rounded-xl p-6 border border-secondary/10">
-              <h2 className="text-2xl font-bold text-primary font-poppins mb-4">Visit Us</h2>
+              <h2 className="text-2xl text-center font-bold text-primary font-poppins mb-4">Visit Us</h2>
               <div className="flex flex-col md:flex-row items-center justify-between gap-6">
                 <div className="flex-1">
                   <p className="text-secondary font-figtree">

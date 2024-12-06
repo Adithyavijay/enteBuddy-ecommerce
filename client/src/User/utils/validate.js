@@ -19,6 +19,38 @@ export const validatePhoneNumber = (phoneNumber) => {
   return phoneNumberRegex.test(phoneNumber);
 };
 
+export const validateCity = (city)=>{
+  if(!city || city ==""){
+    return false ;
+  } 
+  else{
+    return true;
+  } 
+  
+} 
+
+export const validateState = (state)=>{
+  if(!state || state ==""){
+    return false ;
+  } 
+  else{
+    return true;
+  } 
+  
+} 
+export const validateBilling = (state)=>{
+  if(!state || state ==""){
+    return false ;
+  } 
+  else{
+    return true;
+  } 
+  
+} 
+
+
+
+
 // Validate pin code
 export const validatePinCode = async (pinCode, setError, userId) => {
   // Regular expression for pin code validation (assuming 6 digits)

@@ -5,20 +5,15 @@ import { CartContext } from "../contexts/CartContext";
 import { useContext, useState } from "react";
 import flag from "../img/flag.jpg";
 import DTDC from "../img/DTDC.png";
-import {
-  CitySelect,
-  CountrySelect,
-  StateSelect,
-  GetCountries,
-  GetCity,
-  GetState,
-} from "react-country-state-city";
-import "react-country-state-city/dist/react-country-state-city.css";
+
 import {
   validateName,
   validateEmail,
   validatePhoneNumber,
   validatePinCode,
+  validateState,
+  validateCity ,
+  validateBilling
 } from "../utils/validate";
 import { useNavigate } from "react-router-dom";
 import { userContext } from "../contexts/UserContext";
@@ -26,8 +21,6 @@ import { makePayment } from "../utils/payment";
 import { Navigate } from "react-router-dom";
 import { toast, Toaster } from "react-hot-toast";
 import { SidebarContext } from "../contexts/SidebarContext";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHourglass } from "@fortawesome/free-solid-svg-icons";
 import { OrderContext } from "../contexts/OrderContext";
 
 const Checkout = () => {
@@ -40,12 +33,13 @@ const Checkout = () => {
     realTotalPrice,
   } = useContext(CartContext);
 
-  const [stateid, setstateid] = useState(0);
-  const [cityid, setcityid] = useState(0);
   const [nameError, setNameError] = useState(null);
   const [emailError, setEmailError] = useState(null);
   const [pinCodeError, setPinCodeError] = useState({ msg: null, error: false });
   const [phoneNumberError, setPhoneNumberError] = useState(null);
+  const [cityError,setCityError] = useState(null);
+  const [stateError,setStateError]=useState(null);
+  const [billingError,setBillingError] =useState(null)
   const { clearCart } = useContext(CartContext);
   const { handleClose } = useContext(SidebarContext);
   const [orderDetails, setOrderDetails] = useState({
@@ -63,7 +57,9 @@ const Checkout = () => {
     couponId: couponId ? couponId : "",
     shippingMethod: null,
     paymentMethod: null,
-  });
+  }); 
+
+  console.log(orderDetails)
   const [shipMethodError, setShipMethodError] = useState(false);
   const [paymentError, setPaymentError] = useState(false);
   const API = import.meta.env.VITE_API_URL;
@@ -114,6 +110,27 @@ const Checkout = () => {
     } else {
       setPhoneNumberError("");
     }
+    if (!validateState(orderDetails.state)) {
+      setStateError("Please enter your state");
+      error = true;
+    } else {
+      stateError("");
+    }
+
+
+    if (!validateCity(orderDetails.city)) {
+      setCityError("Please enter your city");
+      error = true;
+    } else {
+      cityError("");
+    } 
+    if (!validateBilling(orderDetails.billing_address)) {
+      setBillingError("Please enter your Billing address");
+      error = true;
+    } else {
+      cityError("");
+    }
+
 
     if (
       orderDetails.shippingMethod == null ||
@@ -134,13 +151,7 @@ const Checkout = () => {
     } else {
       setPaymentError(false);
     }
-    validatePinCode(orderDetails.pincode, setPinCodeError, userId);
-
-    if (cityid === 0 || stateid === 0) {
-      toast.error("Please choose your city and state");
-      error = true;
-    }
-    // Additional logic for handling form submission
+    validatePinCode(orderDetails.pincode, setPinCodeError, userId)
     
     if (error == false) {
       // Form submission logic here
@@ -232,10 +243,10 @@ const Checkout = () => {
       <Toaster toastOptions={{ duration: 2000 }} />
       <div className="flex flex-col items-center border-b bg-white py-2 sm:flex-row sm:px-10 lg:px-20 xl:px-32">
         <a
-          href="#"
+          href="/"
           className="text-2xl font-bold text-gray-800 hidden lg:block  "
         >
-          <img src={logo} className="w-15 h-10 text-center " alt="logo" />
+          <img  src={logo} className="w-15 h-10 text-center " alt="logo" />
         </a>
         <div className="mt-4 py-2 text-xs sm:mt-0 sm:ml-auto sm:text-base">
           <div className="relative">
@@ -367,7 +378,7 @@ const Checkout = () => {
                     id="name"
                     name="name"
                     value={orderDetails.name}
-                    className={`w-full rounded-md border dark:bg-white  ${
+                    className={`w-full rounded-md border dark:bg-white dark:text-black  ${
                       nameError ? "border-red-500" : "border-gray-200"
                     }  px-4 py-3 pl-3 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500`}
                     placeholder="your name"
@@ -389,7 +400,7 @@ const Checkout = () => {
                 )}
                 <label
                   htmlFor="email"
-                  className="mt-4 mb-2 block text-sm font-medium font-poppins dark:text-black"
+                  className=" mt-4 mb-2 block text-sm font-medium font-poppins  dark:bg-white dark:text-black"
                 >
                   Email
                 </label>
@@ -398,7 +409,7 @@ const Checkout = () => {
                     type="text"
                     id="email"
                     name="email"
-                    className={`w-full rounded-md border ${
+                    className={`w-full rounded-md border dark:bg-white dark:text-black  ${
                       emailError
                         ? "border-red-500"
                         : "border-gray-200  dark:bg-white "
@@ -446,11 +457,11 @@ const Checkout = () => {
                 </label>
                 <div className="">
                   <input
-                    type="text"
+                    type="number"
                     id="phonenumber"
                     name="mobile"
                     value={orderDetails.mobile}
-                    className={`w-full rounded-md border ${
+                    className={`w-full rounded-md border dark:bg-white dark:text-black ${
                       phoneNumberError
                         ? "border-red-500"
                         : "border-gray-200 dark:bg-white"
@@ -484,18 +495,30 @@ const Checkout = () => {
                 </label>
                 <div className="">
                   <div className="relative flex-shrink-0 sm:w-7/12 ">
-                    <input
+                    <textarea
                       type="text"
                       id="billing-address"
                       name="billing_address"
                       value={orderDetails.billing_address}
-                      className="w-full rounded-md border  border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500 dark:bg-white"
+                      className="w-full rounded-md border dark:text-black border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500 dark:bg-white"
                       placeholder="Street Address"
                       required
                       onChange={(e) =>
                         handleOrderDetails(e.target.name, e.target.value)
                       }
-                    />
+                      onBlur={()=>{
+                        if(!validateBilling(orderDetails.billing_address)){
+                          setBillingError("Please Provide Billing Address")
+                        } else {
+                          setBillingError("")
+                        }
+                      }} 
+                    /> 
+                     {billingError && (
+                  <p className="text-red-500 text-base font-normal font-poppins my-1 text-center">
+                    {billingError}
+                  </p>
+                )}
                     <div className="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
                       <img
                         className="h-4 w-4 object-contain"
@@ -506,32 +529,63 @@ const Checkout = () => {
                   </div>
                   <div className="font-medium font-poppins text-sm my-2  ">
                     <h6 className="mb-2 dark:text-black">State</h6>
-                    <StateSelect
-                      darkMode={true}
-                      countryid={101}
-                      onChange={(e) => {
-                        setstateid(e.id);
-                        handleOrderDetails("state", e.name);
-                      }}
-                      placeHolder="Select State"
-                      style={{ background: "white" }}
-                      required
-                    />
+                    
+                      <input
+                    type="text"
+                    id="state"
+                    name="state"
+                    value={orderDetails.state}
+                    className={`w-full rounded-md border dark:bg-white dark:text-black  ${
+                      stateError ? "border-red-500" : "border-gray-200"
+                    }  px-4 py-3 pl-3 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500`}
+                    placeholder="your State"
+                    required={true}
+                    onChange={(e) =>
+                      handleOrderDetails(e.target.name , e.target.value)
+                    }
+                    onBlur={() => {
+                      if (!validateState(orderDetails.state)) {
+                        setStateError("Please provide your state");
+                      } else {
+                        setStateError(null);
+                      }
+                    }} 
+                  />  
+                   {stateError && (
+                  <p className="text-red-500 text-base font-normal font-poppins my-1 text-center">
+                    {stateError}
+                  </p>
+                )}
                   </div>
 
                   <div className="font-poppins text-sm font-medium my-2">
-                    <h2 className="mb-2 dark:text-black">City</h2>
-                    <CitySelect
-                      countryid={101}
-                      stateid={stateid}
-                      onChange={(e) => {
-                        setcityid(e.id);
-                        handleOrderDetails("city", e.name);
-                      }}
-                      placeHolder="Select city"
-                      required
-                      style={{ background: "white" }}
-                    />
+                    <h2 className="mb-2 dark:text-black">City</h2> 
+                    <input
+                    type="text"
+                    id="city"
+                    name="city"
+                    value={orderDetails.city}
+                    className={`w-full rounded-md border dark:bg-white dark:text-black  ${
+                      cityError ? "border-red-500" : "border-gray-200"
+                    }  px-4 py-3 pl-3 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500`}
+                    placeholder="your city"
+                    required={true}
+                    onChange={(e) =>
+                      handleOrderDetails(e.target.name , e.target.value)
+                    }
+                    onBlur={() => {
+                      if (!validateCity(orderDetails.city)) {
+                        setCityError("Please provide city");
+                      } else {
+                        setCityError(null);
+                      }
+                    }} 
+                  /> 
+                   {cityError && (
+                  <p className="text-red-500 text-base font-normal font-poppins my-1 text-center">
+                    {cityError}
+                  </p>
+                )}
                   </div>
                   <div className="mt-3 w-full">
                     <input
@@ -752,18 +806,18 @@ const Checkout = () => {
 
           <div className="mt-10 flex items-center justify-between">
             <p className="text-sm font-medium text-gray-900">Total Price</p>
-            <p className="font-semibold text-gray-900">₹ {realTotalPrice}</p>
+            <p className="font-semibold text-gray-900">₹ {realTotalPrice.toFixed(0)}</p>
           </div>
           <div className="mt-3 flex items-center justify-between">
             <p className="text-sm font-medium text-gray-900">You Save</p>
-            <p className="font-semibold text-red-600">- ₹ {totalDiscount}</p>
+            <p className="font-semibold text-red-600">- ₹ {totalDiscount.toFixed(0)}</p>
           </div>
           <div className="mt-3 flex items-center justify-between">
             <p className="text-sm font-medium text-gray-900">
               Total Amount Due
             </p>
             <p className="text-2xl font-semibold text-gray-900">
-              ₹{discountPrice > 0 ? discountPrice : totalPrice}
+              ₹{discountPrice > 0 ? discountPrice.toFixed(0) : totalPrice.toFixed(0)}
             </p>
           </div>
           <button
