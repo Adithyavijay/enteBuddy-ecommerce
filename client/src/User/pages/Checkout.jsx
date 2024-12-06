@@ -114,7 +114,7 @@ const Checkout = () => {
       setStateError("Please enter your state");
       error = true;
     } else {
-      stateError("");
+      setStateError("");
     }
 
 
