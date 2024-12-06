@@ -122,13 +122,13 @@ const Checkout = () => {
       setCityError("Please enter your city");
       error = true;
     } else {
-      cityError("");
+      setCityError("");
     } 
     if (!validateBilling(orderDetails.billing_address)) {
       setBillingError("Please enter your Billing address");
       error = true;
     } else {
-      cityError("");
+      setBillingError("")
     }
 
 
