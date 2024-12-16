@@ -81,8 +81,8 @@ const verifyPaymentAndPushOrder = async (
         credentials: "include",
       });
       if (orderResponse.ok) {
+        
         toast.success(`Order Placed successfully`);
-
         localStorage.setItem("enteBuddyCartPrice", 0);
         localStorage.setItem("enteBuddyCart", null);
         localStorage.setItem("enteBuddyCouponId", "");

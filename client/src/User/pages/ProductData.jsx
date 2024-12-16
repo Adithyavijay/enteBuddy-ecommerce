@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { ProductContext } from "../contexts/ProductContext";
 import { CartContext } from "../contexts/CartContext";
 import { Link, useParams } from "react-router-dom";
@@ -13,17 +13,35 @@ import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css/pagination";
 import "swiper/css";
 import "swiper/css/navigation";
+import usePixelEvent from "../hooks/usePixelEvent";
 
 const ProductData = () => {
   const { id } = useParams();
   const { products } = useContext(ProductContext);
   const { addToCart, handleCart } = useContext(CartContext);
-  const { setIsOpen, isOpen } = useContext(SidebarContext);
   const [revCount, setRevCount] = useState(0);
+  const trackEvent = usePixelEvent();
   const API = import.meta.env.VITE_API_URL;
   const product = products.find((item) => {
     return item._id === id;
   });
+
+  useEffect(() => {
+    if (product) {
+      trackEvent(
+        "ViewContent",
+        {
+          contentIds: [product._id],
+          content_name: product.title,
+          content_category: product.category,
+          content_type: "product",
+          currency: "INR",
+          value: product.price,
+        },
+        "/api/trackEvent/viewContent"
+      );
+    }
+  }, [product]);
 
   if (!product || product.length === 0) return <Shimmer />;
 
@@ -33,7 +51,7 @@ const ProductData = () => {
   const {
     title,
     primaryImage,
-    subHeading ,
+    subHeading,
     description,
     price,
     category,
@@ -43,7 +61,6 @@ const ProductData = () => {
     serviceFeatures,
   } = product;
 
-  
   return (
     <div>
       <div className="flex flex-col md:flex-row pt-[65px] md:pb-1 md:w-screen md:h-screen  items-center overflow-visible bg font">
@@ -56,7 +73,10 @@ const ProductData = () => {
             className="mySwiper"
           >
             {[primaryImage, ...secondaryImages].map((image) => (
-              <SwiperSlide key={image.name + Math.random()} style={{display:'flex', justifyContent:'center'}}>
+              <SwiperSlide
+                key={image.name + Math.random()}
+                style={{ display: "flex", justifyContent: "center" }}
+              >
                 <img
                   src={API + image.path.split("server")[1]}
                   className="w-full"
@@ -150,7 +170,10 @@ const ProductData = () => {
               ))}
           </div>
 
-          <div className="fixed bottom-0 text-white justify-evenly p-4 w-full left-0 flex z-10" style={{backgroundColor:'#3A2D3F'}}>
+          <div
+            className="fixed bottom-0 text-white justify-evenly p-4 w-full left-0 flex z-10"
+            style={{ backgroundColor: "#3A2D3F" }}
+          >
             <div className="w-6/12 flex items-center ">
               <div className="max-w-[45px] rounded-full">
                 <img

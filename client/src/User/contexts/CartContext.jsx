@@ -3,6 +3,7 @@ import { userContext } from "./UserContext";
 import { toast } from "react-hot-toast";
 import { SidebarContext } from "./SidebarContext";
 import { LogContext } from "./LogContext";
+import usePixelEvent from "../hooks/usePixelEvent";
 
 export const CartContext = createContext();
 const CartProvider = ({ children }) => {
@@ -80,9 +81,19 @@ const CartProvider = ({ children }) => {
     }
   };
   //  add to cart
-  const addToCart = async (product) => {
+  const addToCart = async (product) => { 
+   
     const addingToCart = async () => {
-      try {
+      try {  
+        const trackEvent = usePixelEvent();
+        trackEvent('AddToCart', { 
+          contentIds :[ product._id ], 
+          content_name : product.title,
+          content_category : product.category,
+          content_type : 'product',
+          currency : 'INR',
+          value : product.price
+        } ,`/api/trackEvent/AddToCart/${userId}`)  ; 
         const response = await fetch(`/api/user/addToCart/${userId}`, {
           method: "POST",
           headers: {

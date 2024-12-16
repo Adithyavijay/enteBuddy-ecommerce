@@ -11,9 +11,9 @@ import cart from "../models/cart.model.js";
 
 export const adminSignin = async (req, res, next) => {
   const { email, password } = req.body;
-  try {
-    const Admin = await admin.findOne({});
-    if (Admin.name == email && Admin.password == password) {
+  try {   
+    const Admin = await admin.findOne({}); 
+    if (Admin.name == email && Admin.password == password) { 
       const token = jwt.sign({ id: Admin._id }, process.env.JWT_SECRET);
 
       res

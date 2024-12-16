@@ -33,11 +33,11 @@ import ShippingPolicy from "./User/pages/ShppingPolicy";
 import OrdersList from "./Admin/components/orderManagement/OrdersList";
 import OrderDetails from "./Admin/components/orderManagement/OrderDetails";
 import AboutUs from "./User/components/AboutUs";
-
+import LandingPage from "./User/pages/LandingPage";
 
 const AppLayout =()=>{ 
   return (
-    <div>
+  <div> 
     <Header/>
     <SideBar/>
     <Outlet/>
@@ -138,11 +138,15 @@ const router = createBrowserRouter([
  {
   path : '/orderTracking/:orderId',
   Component : OrderTracking
+ } ,
+ {
+  path: '/landingPage',
+  Component : LandingPage
  }
 
 ]);
 
-const App = () => {
+const App = () => { 
   return (
     <AdminContextProvider> 
       <AgeVerificationProvider>
@@ -151,7 +155,7 @@ const App = () => {
         <SidebarProvider>
           <CartProvider>
             <ProductProvider> 
-              <OrderProvider>
+              <OrderProvider> 
               <RouterProvider router={router} />
               </OrderProvider>
             </ProductProvider>

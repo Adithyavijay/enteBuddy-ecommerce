@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ProductContext } from "../contexts/ProductContext";
 import Product from "../components/Product";
 import Banner from "../components/Banner";
@@ -8,26 +8,40 @@ import { userContext } from "../contexts/UserContext";
 import { CartContext } from "../contexts/CartContext";
 import Shimmer from "../components/Shimmer";
 import AgeVerification from "../components/AgeVerification";
-
+import usePixelEvent from "../hooks/usePixelEvent";
 import { AgeVerificationContext } from "../contexts/AgeVerificationContext";
 
-const Home = () => {
-  const { products } = useContext(ProductContext); 
+const Home = () => { 
+  const { products } = useContext(ProductContext);
   const { userId } = useContext(userContext);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [isVerified, setIsVerified] = useState(true);
+  const trackEvent = usePixelEvent();
+  let productId = [];
+  let totalPrice = 0;
 
   const { ageVerificationModal, setAgeverificationModal } = useContext(
     AgeVerificationContext
   );
+  useEffect(() => {
+    if (products && products.length > 0) {
+      trackEvent("ViewContent", {
+        contentIds: productId,
+        content_type: "product",
+        currency: "INR",
+        value: totalPrice,
+      });
+    }
+  }, []);
 
   if (!products || products.length === 0) {
     return <Shimmer />;
   }
+  products.forEach((product) => {
+    productId.push(product._id);
+    totalPrice += product.price;
+  });
 
-  // const onClose= ()=>{
-  //   setAgeModal(false)
-  // }
   // Function to handle category change
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
@@ -44,7 +58,7 @@ const Home = () => {
     selectedCategory === "All"
       ? products
       : products.filter((product) => product.category === selectedCategory);
-
+ 
   return (
     <>
       <section className="bg-white pt-16">

@@ -9,6 +9,7 @@ import paymentRoute from './routes/payment.route.js'
 import cookieParser from "cookie-parser";
 import Razorpay from "razorpay";
 import path from "path";
+import eventRoute from './routes/event.route.js';
 import { fileURLToPath } from "url";
 
 
@@ -35,7 +36,7 @@ app.use(
     origin: "http://localhost:5173",
     credentials: true,
   })
-);
+);  
 
 
 const fileName = fileURLToPath(import.meta.url)
@@ -51,7 +52,7 @@ app.use("/api/user", userRoute);
 app.use("/api/auth", authRoute);
 app.use("/api/admin", adminRoute);
 app.use('/api/payment',paymentRoute)
-
+app.use('/api/trackEvent', eventRoute);
 
 
 app.use((err, req, res, next) => {

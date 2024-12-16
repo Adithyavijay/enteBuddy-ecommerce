@@ -4,8 +4,7 @@ import homeDelivery from "../img/homeDelivery.jpg";
 import { CartContext } from "../contexts/CartContext";
 import { useContext, useState } from "react";
 import flag from "../img/flag.jpg";
-import DTDC from "../img/DTDC.png";
-
+import DTDC from "../img/DTDC.png"; 
 import {
   validateName,
   validateEmail,
@@ -17,11 +16,12 @@ import {
 } from "../utils/validate";
 import { useNavigate } from "react-router-dom";
 import { userContext } from "../contexts/UserContext";
-import { makePayment } from "../utils/payment";
+import { makePayment } from "../utils/payment"; 
 import { Navigate } from "react-router-dom";
 import { toast, Toaster } from "react-hot-toast";
 import { SidebarContext } from "../contexts/SidebarContext";
 import { OrderContext } from "../contexts/OrderContext";
+import usePixelEvent from "../hooks/usePixelEvent";
 
 const Checkout = () => {
   const {
@@ -41,7 +41,7 @@ const Checkout = () => {
   const [stateError,setStateError]=useState(null);
   const [billingError,setBillingError] =useState(null)
   const { clearCart } = useContext(CartContext);
-  const { handleClose } = useContext(SidebarContext);
+  const { handleClose } = useContext(SidebarContext); 
   const [orderDetails, setOrderDetails] = useState({
     name: "",
     email: "",
@@ -59,14 +59,26 @@ const Checkout = () => {
     paymentMethod: null,
   }); 
 
-  console.log(orderDetails)
+ 
   const [shipMethodError, setShipMethodError] = useState(false);
   const [paymentError, setPaymentError] = useState(false);
   const API = import.meta.env.VITE_API_URL;
-  const { setOrderPlaced } = useContext(OrderContext);
+  const { setOrderPlaced } = useContext(OrderContext); 
+  const contentIds= [];
+  const contents = [];
+
+
+  cart?.forEach((cartItem)=>{
+    contentIds.push(cartItem._id);
+    contents.push({id : cartItem._id , quantity : cartItem.quantity})
+  }) 
+
+
+  const trackEvent = usePixelEvent();
 
   const navigate = useNavigate();
   const { userId } = useContext(userContext);
+  console.log(userId)
 
   useEffect(() => {
     if (userId == null || userId == undefined || userId == "null") {
@@ -78,7 +90,19 @@ const Checkout = () => {
       ...prev,
       products: cart,
     }));
-  }, [cart]);
+  }, [cart]); 
+
+  useEffect(()=>{ 
+    if(contentIds.length!==0 && totalPrice){
+      trackEvent('Purchase' , {  
+        contentIds :contentIds, 
+        contents:contents,
+        content_type : 'product',
+        currency : 'INR',
+        value : totalPrice } ,`/api/trackEvent/purchase/${userId}` ,{ email : "adithya@gmail.com", mobile : "916238075602" ,city :"changanassery" , state:"kerala", pincode :"123456" , billing_address : "aadfdsfasd"})
+    }
+  },[cart,totalPrice])
+
 
   const handleOrderDetails = (name, value) => {
     setOrderDetails((prev) => ({
@@ -182,6 +206,12 @@ const Checkout = () => {
                 userId,
                 orderDetails
               );
+              trackEvent('Purchase' , {  
+                contentIds :contentIds, 
+                contents:contents,
+                content_type : 'product',
+                currency : 'INR',
+                value : totalPrice } ,'/api/trackEvent/purchase' ,{ ...orderDetails })
               clearCart();
               handleClose();
               setOrderPlaced(orderDetails);
@@ -216,6 +246,12 @@ const Checkout = () => {
           });
 
           if (response.ok) {
+            trackEvent('Purchase' , {  
+              contentIds :contentIds, 
+              contents:contents,
+              content_type : 'product',
+              currency : 'INR',
+              value : totalPrice } ,'/api/trackEvent/purchase' ,{ ...orderDetails })
             setOrderPlaced(orderDetails);
             localStorage.setItem("enteBuddyCartPrice", 0);
             localStorage.setItem("enteBuddyCart", null);
