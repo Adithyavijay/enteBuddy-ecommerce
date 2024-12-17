@@ -4,7 +4,7 @@ import logo from '../img/logo.png';
 import { Link} from 'react-router-dom'
 const LandingPage = () => {
   return (
-    <div className="bg-hero2 bg-contain bg-center min-h-screen flex flex-col justify-center items-center font-poppins px-4" style={{ backgroundImage: `url(${imgPath})` }}>
+    <div className="bg-hero2 bg-contain bg-center min-h-screen flex flex-col justify-center items-center font-poppins px-4 bg-tertiary" style={{ backgroundImage: `url(${imgPath})` }}>
       {/* Header Section */}
       <div className="text-center space-y-4">
         {/* Logo */}
