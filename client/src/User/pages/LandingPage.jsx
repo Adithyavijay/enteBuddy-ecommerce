@@ -1,4 +1,3 @@
-
 import React from 'react';
 import imgPath from '../img/doodle_finaldraft.png';
 import logo from '../img/logo.png';
@@ -6,17 +5,17 @@ import logo from '../img/logo.png';
 const LandingPage = () => {
   return (
     <div
-      className="relative bg-contain bg-center min-h-screen flex flex-col justify-center items-center px-4 bg-tertiary font-poppins"
+      className="relative h-[100dvh] bg-contain bg-center flex flex-col justify-center items-center px-4 bg-tertiary font-poppins"
       style={{ backgroundImage: `url(${imgPath})` }}
     >
       {/* Gradient Overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/80"></div>
 
       {/* Header Section */}
-      <div className="relative text-center space-y-4 z-10 ">
+      <div className="relative text-center space-y-4 z-10 pt-safe">
         {/* Logo */}
         <img
-           img src={`${logo}`}
+          src={logo}
           alt="Ente Buddy Logo"
           className="h-16 mx-auto animate-fade-in"
         />
@@ -37,7 +36,6 @@ const LandingPage = () => {
         </button>
       </div>
 
-  
       {/* Features Section */}
       <div className="relative mt-10 grid grid-cols-2 md:grid-cols-4 gap-6 text-center z-10 animate-fade-in">
         {/* Feature 1: All India Delivery */}
@@ -77,6 +75,3 @@ const LandingPage = () => {
 };
 
 export default LandingPage;
-
-
-
