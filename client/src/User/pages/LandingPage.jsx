@@ -1,6 +1,7 @@
 import React from 'react';
 import imgPath from '../img/doodle_finaldraft.png';
 import logo from '../img/logo.png';
+import {Link} from 'react-router-dom'
 
 const LandingPage = () => {
   return (
@@ -31,10 +32,13 @@ const LandingPage = () => {
         </p>
 
         {/* Call-to-action Button with Pulse Animation */}
+        <Link to='/'>
         <button className="mt-4 px-6 py-3 bg-primary text-tertiary font-semibold rounded-full shadow-lg hover:bg-secondary hover:text-white transition transform hover:scale-105 animate-pulse">
           Explore Now
         </button>
+        </Link>
       </div>
+     
 
       {/* Features Section */}
       <div className="relative mt-10 grid grid-cols-2 md:grid-cols-4 gap-6 text-center z-10 animate-fade-in">
