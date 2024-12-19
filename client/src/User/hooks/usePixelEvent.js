@@ -12,7 +12,7 @@ const usePixelEvent = () => {
     const event_time = Math.floor(new Date() / 1000);
 
     if (window.fbq) {
-      window.fbq("track", eventName, eventData, { eventID });
+      window.fbq("track", eventName, eventData, { eventID : eventID });
       console.log(`Pixel event tracked: ${eventName}`, { eventData, eventID });
     }
     
