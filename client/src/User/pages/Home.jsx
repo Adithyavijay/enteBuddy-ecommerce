@@ -69,14 +69,14 @@ const Home = () => {
             {categories.map((category, index) => (
               <button
                 key={index}
-                className={` px-5 py-2 rounded-3xl flex justify-center items-center m-1 ${
+                className={` px-5 py-2 dark:text-black rounded-3xl flex justify-center items-center m-1 ${
                   selectedCategory === category
                     ? "bg-[#00DD9C] text-[#FDD100]"
                     : "bg-gray-200"
                 }`}
                 onClick={() => handleCategoryChange(category)}
               >
-                {category}
+               {category.charAt(0).toUpperCase() + category.slice(1).toLowerCase()}
               </button>
             ))}
           </div>
