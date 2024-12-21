@@ -31,7 +31,7 @@ const ProductData = () => {
       trackEvent(
         "ViewContent",
         {
-          contentIds: [product._id],
+          content_Ids: [product._id],
           content_name: product.title,
           content_category: product.category,
           content_type: "product",
