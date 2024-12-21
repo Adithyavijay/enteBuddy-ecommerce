@@ -26,7 +26,7 @@ const Home = () => {
   useEffect(() => {
     if (products && products.length > 0) {
       trackEvent("ViewContent", {
-        contentIds: productId,
+        content_Ids: productId,
         content_type: "product",
         currency: "INR",
         value: totalPrice,

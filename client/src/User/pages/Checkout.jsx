@@ -95,7 +95,7 @@ const Checkout = () => {
   useEffect(()=>{ 
     if(contentIds.length!==0 && totalPrice){
       trackEvent('Purchase' , {  
-        contentIds :contentIds, 
+        content_Ids :contentIds, 
         contents:contents,
         content_type : 'product',
         currency : 'INR',
@@ -207,7 +207,7 @@ const Checkout = () => {
                 orderDetails
               );
               trackEvent('Purchase' , {  
-                contentIds :contentIds, 
+                content_Ids :contentIds, 
                 contents:contents,
                 content_type : 'product',
                 currency : 'INR',
@@ -247,7 +247,7 @@ const Checkout = () => {
 
           if (response.ok) {
             trackEvent('Purchase' , {  
-              contentIds :contentIds, 
+              content_Ids :contentIds, 
               contents:contents,
               content_type : 'product',
               currency : 'INR',
