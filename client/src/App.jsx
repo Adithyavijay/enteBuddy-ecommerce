@@ -34,6 +34,7 @@ import OrdersList from "./Admin/components/orderManagement/OrdersList";
 import OrderDetails from "./Admin/components/orderManagement/OrderDetails";
 import AboutUs from "./User/components/AboutUs";
 import LandingPage from "./User/pages/LandingPage";
+import LandingPageAmazon from "./User/pages/LandingPageAmazon";
 
 const AppLayout =()=>{ 
   return (
@@ -87,7 +88,7 @@ const router = createBrowserRouter([
     {
       path : '/about-us',
       element :<AboutUs/>
-    }
+    }  
     ]
   },
   {
@@ -142,6 +143,10 @@ const router = createBrowserRouter([
  {
   path: '/landingPage',
   Component : LandingPage
+ },
+ {
+  path: '/landingPageAmazon',
+  Component : LandingPageAmazon
  }
 
 ]);
